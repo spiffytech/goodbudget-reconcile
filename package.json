@@ -1,0 +1,23 @@
+{
+  "name": "goodbudget-reconcile",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "csv-parse": "^2.0.0",
+    "moment": "^2.19.3",
+    "nconf": "^0.9.1"
+  },
+  "devDependencies": {
+    "@types/csv-parse": "^1.1.11",
+    "@types/moment": "^2.13.0",
+    "@types/nconf": "0.0.35",
+    "ts-node": "^3.3.0",
+    "typescript": "^2.6.2"
+  }
+}
