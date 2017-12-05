@@ -93,26 +93,24 @@ function mkDateWindows(dates: Date[]): DateWindows {
  */
 function getTxnsInWindow(txns: Txn[], windows: DateWindows, startDate: Date, windowSize: number) {
     const endTimestamp = startDate.getTime() + (windowSize * 86400 * 1000);
+    const keys = Object.keys(windows).map(parseFloat).sort();
     /**
      * Finds the first bank transaction occurring on or after our start date
      */
     function findNearestTxn(date: Date): number | undefined {
-        return Object.keys(windows).map(parseFloat).find(
-            (timestamp) => timestamp >= date.getTime()
-        );
+        return keys.find((timestamp) => timestamp >= date.getTime());
     }
 
-    const windowStartDate = findNearestTxn(startDate);
-    if (!windowStartDate || windowStartDate >= endTimestamp) return [];
+    const windowStartDate = keys.find((timestamp) => timestamp >= startDate.getTime());
+    // TODO: Handle case where there is exactly one transaction, and it's at the
+    // end of the window
+    if (!windowStartDate || windowStartDate > endTimestamp) return [];
     const windowStartIndex = windows[windowStartDate];
 
-    const windowEndDate = findNearestTxn(new Date(endTimestamp));
+    // Does not do >= so that we can always have start and end indexes be different
+    const windowEndDate = keys.find((timestamp) => timestamp > endTimestamp);
     const windowEndIndex = windowEndDate ? windows[windowEndDate] : Number.MAX_SAFE_INTEGER;
 
-    if (startDate.getTime() === new Date("2017-11-28").getTime()) {
-        console.log(startDate, new Date(endTimestamp), windowStartIndex, windowEndIndex, windowEndDate);
-        Object.keys(windows).map(parseFloat).forEach(ts => console.log(ts, endTimestamp, endTimestamp - ts))
-    }
     return txns.slice(windowStartIndex, windowEndIndex)
 }
 
